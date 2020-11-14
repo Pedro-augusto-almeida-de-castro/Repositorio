@@ -1,0 +1,101 @@
+#include <vector>
+#include <iostream>
+using namespace std;
+class Contato
+{
+private:
+    std::string nome;
+    std::string tel;
+    std::string email;
+
+public:
+    Contato(const std::string &nome, const std::string &tel, const std::string &email);
+
+    virtual std::string getNome();
+
+    virtual void setNome(const std::string &nome);
+
+    virtual std::string getTel();
+
+    virtual void setTel(const std::string &tel);
+
+    virtual std::string getEmail();
+
+    virtual void setEmail(const std::string &email);
+
+    virtual std::string toString();
+
+};
+class Agenda
+{
+public:
+    const std::vector<Contato*> Contatos = std::vector<Contato*>();
+
+    Agenda();
+
+    virtual std::vector<Contato*> getContatos();
+
+    virtual void setContatos(std::vector<Contato*> &Contatos);
+
+    virtual void addCont(Contato *c);
+    virtual Contato *mostra(Contato *c);
+    virtual void removeCont(Contato *c);
+
+
+    virtual void mostraLista(std::vector<Contato*> &List);
+};
+
+Contato::Contato(const std::string &nome, const std::string &tel, const std::string &email)
+{
+    this->nome = nome;
+    this->tel = tel;
+    this->email = email;
+}
+std::string Contato::getNome()
+{
+    return nome;
+}
+void Contato::setNome(const std::string &nome)
+{
+    this->nome = nome;
+}
+std::string Contato::getTel()
+{
+    return tel;
+}
+void Contato::setTel(const std::string &tel)
+{
+    this->tel = tel;
+}
+std::string Contato::getEmail()
+{
+    return email;
+}
+void Contato::setEmail(const std::string &email)
+{
+    this->email = email;
+}
+std::string Contato::toString()
+{
+    return  L"Nome: " + nome + L"\n" + L"Tel=" + tel + L"\n" + L"E-mail=" + email;
+}
+void incluir (std::vector<Contato *>)
+{
+    Contato *c1 = new Contato(L"Pedro",L"213165",L"c.@");
+    Contato *c2 = new Contato(L"c",L"b",L"c.@$%");
+    Contato *c3 = new Contato(L"v",L"b",L"c");
+    Contato *c4 = new Contato(L"n",L"b",L"c");
+    Contato *c5 = new Contato(L"VOCE SAIU",L"b",L"c");
+    Agenda *a = new Agenda();
+    a->addCont(c5);
+    a->addCont(c4);
+    a->addCont(c3);
+    a->addCont(c2);
+    a->addCont(c1);
+    a->mostraLista(a->getContatos());
+    a->removeCont(c5);
+    std::cout << L"***********************************************************\n***************************************\n" << std::endl;
+    a->mostraLista(a->getContatos());
+
+    delete a;
+}
