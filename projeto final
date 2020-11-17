@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include<iostream>
+#include<iterator>
 using namespace std;
 class Contato
 {
@@ -25,6 +26,12 @@ public:
     void setEmail(const std::string &email);
 
     std::string toString();
+    friend ostream& operator<<(ostream &out, Contato &c) {
+      out << "Nome: "<< c.nome << endl
+          << "Telefone: "<< c.tel << endl
+          << "E-mail: " << c.email << endl;
+      return out;
+    }
 
 };
 class Agenda
@@ -39,11 +46,11 @@ public:
     void setContatos(std::vector<Contato*> &Contatos);
 
     void addCont(Contato *c);
-    Contato *mostra(Contato *c);
-    void removeCont(Contato *c);
+    Contato *mostra(string nome);
+    void removeCont(string nome);
 
 
-    void motraLista(std::vector<Contato*> &List);
+    void mostraLista();
 };
 	Contato::Contato(const std::string &nome, const std::string &tel, const std::string &email)
 	{
@@ -86,14 +93,8 @@ public:
 	{
 		return "Nome: " + nome + "\n" + "Tel=" + tel + "\n" + "E-mail=" + email;
 	}
-Agenda::Agenda()
-{
-}
 
-std::vector<Contato*> Agenda::getContatos()
-{
-    return Contatos;
-}
+Agenda::Agenda(){}
 
 void Agenda::setContatos(std::vector<Contato*> &Contatos)
 {
@@ -105,40 +106,38 @@ void Agenda::addCont(Contato *c)
     Contatos.push_back(c);
 }
 
-Contato *Agenda::mostra(Contato *c)
+Contato *Agenda::mostra(string nome)
 {
-    std::vector<Contato*>::const_iterator it = Contatos.begin();
+    auto it = Contatos.begin();
     while (it != Contatos.end())
     {
-        Contato *a = (Contato) *it;
-        if (a->getNome() == c->getNome())
+        if (it->getNome() == nome)
         {
-            return a;
+            return it;
         }
         it++;
     }
     return nullptr;
 }
 
-void Agenda::removeCont(Contato *c)
+void Agenda::removeCont(string nome)
 {
     for (int i = 0; i < Contatos.size(); i++)
     {
         Contato *aux = Contatos[i];
-        if (aux->getNome() == c->getNome())
+        if (aux->getNome() == nome)
         {
             Contatos.erase(Contatos.begin() + i);
         }
     }
 }
 
-void Agenda::motraLista(std::vector<Contato*> &List)
+void Agenda::mostraLista()
 {
-    std::vector<Contato*>::const_iterator it = List.begin();
-    while (it != List.end())
+    auto it = Contatos.begin();
+    while (it != Contatos.end())
     {
-        Contato *a = (Contato) *it;
-        std::cout << a << L"\n" << std::endl;
+        std::cout << it << std::endl;
         it++;
     }
 }
@@ -150,16 +149,17 @@ int main(int argc, char **argv)
     Contato *c3 = new Contato("v","b","c");
     Contato *c4 = new Contato("n","b","c");
     Contato *c5 = new Contato("VOCE SAIU","b","c");
+    string s= "Pedro";
     Agenda *a = new Agenda();
     a->addCont(c5);
     a->addCont(c4);
     a->addCont(c3);
     a->addCont(c2);
     a->addCont(c1);
-    /*a->motraLista(a->getContatos());
-    a->removeCont(c5);
-    std::cout << "***********************************************************\n***************************************\n" << std::endl;
-    a->motraLista(a->getContatos());
+    a->mostraLista();
+    a->removeCont(s);//so na 114 agr e 116 e 140 
+      std::cout << "***********************************************************\n***************************************\n" << std::endl;
+    a->mostraLista();
 
-    delete a;*/
+    delete a;
 }
