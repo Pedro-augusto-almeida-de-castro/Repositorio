@@ -45,9 +45,6 @@ public:
 
     void motraLista(std::vector<Contato*> &List);
 };
-namespace teste
-{
-
 	Contato::Contato(const std::string &nome, const std::string &tel, const std::string &email)
 	{
 		this->nome = nome;
@@ -75,7 +72,7 @@ namespace teste
 		this->tel = tel;
 	}
 
-	std::wstring Contato::getEmail()
+	std::string Contato::getEmail()
 	{
 		return email;
 	}
@@ -89,7 +86,6 @@ namespace teste
 	{
 		return "Nome: " + nome + "\n" + "Tel=" + tel + "\n" + "E-mail=" + email;
 	}
-}
 Agenda::Agenda()
 {
 }
@@ -142,31 +138,28 @@ void Agenda::motraLista(std::vector<Contato*> &List)
     while (it != List.end())
     {
         Contato *a = (Contato) *it;
-        std::wcout << a << L"\n" << std::endl;
+        std::cout << a << L"\n" << std::endl;
         it++;
     }
 }
-void Teste::main(std::vector<std::string> &args)
+
+int main(int argc, char **argv)
 {
-    Contato *c1 = new Contato(L"Pedro",L"213165",L"c.@");
-    Contato *c2 = new Contato(L"c",L"b",L"c.@$%");
-    Contato *c3 = new Contato(L"v",L"b",L"c");
-    Contato *c4 = new Contato(L"n",L"b",L"c");
-    Contato *c5 = new Contato(L"VOCE SAIU",L"b",L"c");
+    Contato *c1 = new Contato("Pedro","213165","c.@");
+    Contato *c2 = new Contato("c","b","c.@$%");
+    Contato *c3 = new Contato("v","b","c");
+    Contato *c4 = new Contato("n","b","c");
+    Contato *c5 = new Contato("VOCE SAIU","b","c");
     Agenda *a = new Agenda();
     a->addCont(c5);
     a->addCont(c4);
     a->addCont(c3);
     a->addCont(c2);
     a->addCont(c1);
-    a->motraLista(a->getContatos());
+    /*a->motraLista(a->getContatos());
     a->removeCont(c5);
-    std::wcout << L"***********************************************************\n***************************************\n" << std::endl;
+    std::cout << "***********************************************************\n***************************************\n" << std::endl;
     a->motraLista(a->getContatos());
 
-    delete a;
-}
-int main(int argc, char **argv)
-{
-    std::vector<std::string> args(argv + 1, argv + argc);
+    delete a;*/
 }
