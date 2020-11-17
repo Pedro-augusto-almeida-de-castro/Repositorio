@@ -1,5 +1,6 @@
+#include <string>
 #include <vector>
-#include <iostream>
+#include<iostream>
 using namespace std;
 class Contato
 {
@@ -11,75 +12,141 @@ private:
 public:
     Contato(const std::string &nome, const std::string &tel, const std::string &email);
 
-    virtual std::string getNome();
+    std::string getNome();
 
-    virtual void setNome(const std::string &nome);
+    void setNome(const std::string &nome);
 
-    virtual std::string getTel();
+    std::string getTel();
 
-    virtual void setTel(const std::string &tel);
+    void setTel(const std::string &tel);
 
-    virtual std::string getEmail();
+    std::string getEmail();
 
-    virtual void setEmail(const std::string &email);
+    void setEmail(const std::string &email);
 
-    virtual std::string toString();
+    std::string toString();
 
 };
 class Agenda
 {
 public:
-    const std::vector<Contato*> Contatos = std::vector<Contato*>();
+    std::vector<Contato*> Contatos = std::vector<Contato*>();
 
     Agenda();
 
-    virtual std::vector<Contato*> getContatos();
+    std::vector<Contato*> getContatos();
 
-    virtual void setContatos(std::vector<Contato*> &Contatos);
+    void setContatos(std::vector<Contato*> &Contatos);
 
-    virtual void addCont(Contato *c);
-    virtual Contato *mostra(Contato *c);
-    virtual void removeCont(Contato *c);
+    void addCont(Contato *c);
+    Contato *mostra(Contato *c);
+    void removeCont(Contato *c);
 
 
-    virtual void mostraLista(std::vector<Contato*> &List);
+    void motraLista(std::vector<Contato*> &List);
 };
+namespace teste
+{
 
-Contato::Contato(const std::string &nome, const std::string &tel, const std::string &email)
-{
-    this->nome = nome;
-    this->tel = tel;
-    this->email = email;
+	Contato::Contato(const std::string &nome, const std::string &tel, const std::string &email)
+	{
+		this->nome = nome;
+		this->tel = tel;
+		this->email = email;
+	}
+
+	std::string Contato::getNome()
+	{
+		return nome;
+	}
+
+	void Contato::setNome(const std::string &nome)
+	{
+		this->nome = nome;
+	}
+
+	std::string Contato::getTel()
+	{
+		return tel;
+	}
+
+	void Contato::setTel(const std::string &tel)
+	{
+		this->tel = tel;
+	}
+
+	std::wstring Contato::getEmail()
+	{
+		return email;
+	}
+
+	void Contato::setEmail(const std::string &email)
+	{
+		this->email = email;
+	}
+
+	std::string Contato::toString()
+	{
+		return "Nome: " + nome + "\n" + "Tel=" + tel + "\n" + "E-mail=" + email;
+	}
 }
-std::string Contato::getNome()
+Agenda::Agenda()
 {
-    return nome;
 }
-void Contato::setNome(const std::string &nome)
+
+std::vector<Contato*> Agenda::getContatos()
 {
-    this->nome = nome;
+    return Contatos;
 }
-std::string Contato::getTel()
+
+void Agenda::setContatos(std::vector<Contato*> &Contatos)
 {
-    return tel;
+    this->Contatos = Contatos;
 }
-void Contato::setTel(const std::string &tel)
+
+void Agenda::addCont(Contato *c)
 {
-    this->tel = tel;
+    Contatos.push_back(c);
 }
-std::string Contato::getEmail()
+
+Contato *Agenda::mostra(Contato *c)
 {
-    return email;
+    std::vector<Contato*>::const_iterator it = Contatos.begin();
+    while (it != Contatos.end())
+    {
+        Contato *a = (Contato) *it;
+        if (a->getNome() == c->getNome())
+        {
+            return a;
+        }
+        it++;
+    }
+    return nullptr;
 }
-void Contato::setEmail(const std::string &email)
+
+void Agenda::removeCont(Contato *c)
 {
-    this->email = email;
+    for (int i = 0; i < Contatos.size(); i++)
+    {
+        Contato *aux = Contatos[i];
+        if (aux->getNome() == c->getNome())
+        {
+            Contatos.erase(Contatos.begin() + i);
+        }
+    }
 }
-std::string Contato::toString()
+
+void Agenda::motraLista(std::vector<Contato*> &List)
 {
-    return  L"Nome: " + nome + L"\n" + L"Tel=" + tel + L"\n" + L"E-mail=" + email;
+    std::vector<Contato*>::const_iterator it = List.begin();
+    while (it != List.end())
+    {
+        Contato *a = (Contato) *it;
+        std::wcout << a << L"\n" << std::endl;
+        it++;
+    }
 }
-void incluir (std::vector<Contato *>)
+void Teste::main(std::vector<std::string> &args)
 {
     Contato *c1 = new Contato(L"Pedro",L"213165",L"c.@");
     Contato *c2 = new Contato(L"c",L"b",L"c.@$%");
@@ -92,10 +159,14 @@ void incluir (std::vector<Contato *>)
     a->addCont(c3);
     a->addCont(c2);
     a->addCont(c1);
-    a->mostraLista(a->getContatos());
+    a->motraLista(a->getContatos());
     a->removeCont(c5);
-    std::cout << L"***********************************************************\n***************************************\n" << std::endl;
-    a->mostraLista(a->getContatos());
+    std::wcout << L"***********************************************************\n***************************************\n" << std::endl;
+    a->motraLista(a->getContatos());
 
     delete a;
+}
+int main(int argc, char **argv)
+{
+    std::vector<std::string> args(argv + 1, argv + argc);
 }
