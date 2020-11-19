@@ -2,15 +2,17 @@
 #include <vector>
 #include<iostream>
 #include<iterator>
+#include <algorithm>
+
 using namespace std;
 class Contato
 {
 private:
-    std::string nome;
     std::string tel;
     std::string email;
-
 public:
+    std::string nome;
+  
     Contato(const std::string &nome, const std::string &tel, const std::string &email);
 
     std::string getNome();
@@ -32,6 +34,7 @@ public:
           << "E-mail: " << c.email << endl;
       return out;
     }
+    
 
 };
 class Agenda
@@ -46,11 +49,10 @@ public:
     void setContatos(std::vector<Contato*> &Contatos);
 
     void addCont(Contato *c);
-    Contato *mostra(string nome);
+    void mostra(string nome);
     void removeCont(string nome);
-
-
     void mostraLista();
+    void compara();
 };
 	Contato::Contato(const std::string &nome, const std::string &tel, const std::string &email)
 	{
@@ -102,64 +104,85 @@ void Agenda::setContatos(std::vector<Contato*> &Contatos)
 }
 
 void Agenda::addCont(Contato *c)
-{
-    Contatos.push_back(c);
+{  
+  Contatos.push_back(c);
 }
 
-Contato *Agenda::mostra(string nome)
+void Agenda::mostra(string nome)
 {
-    auto it = Contatos.begin();
-    while (it != Contatos.end())
+    int controle=0;
+    for (int i = 0; i < Contatos.size(); i++)
     {
-        if (it->getNome() == nome)
-        {
-            return it;
+      Contato *aux = Contatos[i];
+        if(aux->getNome()==nome){
+          cout<<*aux<<"\n";
+          controle=1;
         }
-        it++;
     }
-    return nullptr;
+    if(controle==0){
+      cout<<"Contato nao encontrado.\n";
+    }
+    
+}
+
+void Agenda::compara()
+{
+   int tam = sizeof(Contatos)/sizeof(Contatos[0]);
+
+  sort(Contatos.begin(),Contatos.end(),[](auto a, auto b){
+    return(a->getNome()<b->getNome());
+  });
+
 }
 
 void Agenda::removeCont(string nome)
 {
+    int controle=0;
     for (int i = 0; i < Contatos.size(); i++)
     {
         Contato *aux = Contatos[i];
         if (aux->getNome() == nome)
-        {
+        {   controle=1;
             Contatos.erase(Contatos.begin() + i);
+            cout<<"Contato removido com sucesso.\n";
         }
+    }
+    if(controle==0){
+      cout<<"Contato nao encontrado.\n";
     }
 }
 
 void Agenda::mostraLista()
-{
-    auto it = Contatos.begin();
-    while (it != Contatos.end())
+{   
+    Agenda::compara();
+     for (int i = 0; i < Contatos.size(); i++)
     {
-        std::cout << it << std::endl;
-        it++;
-    }
+        Contato *aux = Contatos[i];
+        cout<<*aux<<"\n";
+    } 
 }
-
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
-    Contato *c1 = new Contato("Pedro","213165","c.@");
-    Contato *c2 = new Contato("c","b","c.@$%");
-    Contato *c3 = new Contato("v","b","c");
-    Contato *c4 = new Contato("n","b","c");
-    Contato *c5 = new Contato("VOCE SAIU","b","c");
-    string s= "Pedro";
+    Contato *c1 = new Contato("Pedro Augusto","pedroagunto@hotmail.com","933001246");
+    Contato *c2 = new Contato("Gustavo","gostodetrc@gmail.com","31984988956");
+    Contato *c3 = new Contato("Thayron","gangangan@pgmlhr.com","989764544");
+    Contato *c4 = new Contato("Gabriel","pcovbnna@ngr.com","318882544");
+    Contato *c5 = new Contato("Pedro Souza","pedro.hfsouza@hotmail.com","3198802444");
+    Contato *c6 = new Contato ("Augusto vendedor avon","avonaredes@revendedor.com","31984988956");
+    string s= "Gabriel";
     Agenda *a = new Agenda();
+    a->addCont(c6);
     a->addCont(c5);
     a->addCont(c4);
     a->addCont(c3);
     a->addCont(c2);
     a->addCont(c1);
     a->mostraLista();
-    a->removeCont(s);//so na 114 agr e 116 e 140 
-      std::cout << "***********************************************************\n***************************************\n" << std::endl;
+    cout<<"*******************\n";
+    a->mostra("Pedro Souza");
+    cout<<"*******************\n";
+    a->removeCont(s);
+      cout << "\n\n" << endl;
     a->mostraLista();
-
     delete a;
 }
