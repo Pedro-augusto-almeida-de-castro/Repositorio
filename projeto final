@@ -5,55 +5,44 @@
 #include <algorithm>
 
 using namespace std;
+
 class Contato
 {
 private:
+    std::string nome;
     std::string tel;
     std::string email;
 public:
-    std::string nome;
-  
-    Contato(const std::string &nome, const std::string &tel, const std::string &email);
-
-    std::string getNome();
-
-    void setNome(const std::string &nome);
-
-    std::string getTel();
-
-    void setTel(const std::string &tel);
-
-    std::string getEmail();
-
-    void setEmail(const std::string &email);
-
-    std::string toString();
-    friend ostream& operator<<(ostream &out, Contato &c) {
-      out << "Nome: "<< c.nome << endl
-          << "Telefone: "<< c.tel << endl
-          << "E-mail: " << c.email << endl;
-      return out;
-    }
-    
-
+  Contato(const std::string &nome, const std::string &tel, const std::string &email);
+  std::string getNome();
+  void setNome(const std::string &nome);
+  std::string getTel();
+  void setTel(const std::string &tel);
+  std::string getEmail();
+  void setEmail(const std::string &email);
+  friend ostream& operator<<(ostream &out, Contato &c) {
+    out << "Nome: "<< c.nome << endl
+        << "Telefone: "<< c.tel << endl
+        << "E-mail: " << c.email << endl;
+    return out;
+  }  
 };
 class Agenda
 {
 public:
     std::vector<Contato*> Contatos = std::vector<Contato*>();
-
     Agenda();
-
     std::vector<Contato*> getContatos();
-
-    void setContatos(std::vector<Contato*> &Contatos);
-
     void addCont(Contato *c);
     void mostra(string nome);
     void removeCont(string nome);
     void mostraLista();
+    void mudaNome(string nome);
+    void mudaTel(string nome);
+    void mudaEmail(string nome);
     void compara();
 };
+
 	Contato::Contato(const std::string &nome, const std::string &tel, const std::string &email)
 	{
 		this->nome = nome;
@@ -91,21 +80,68 @@ public:
 		this->email = email;
 	}
 
-	std::string Contato::toString()
-	{
-		return "Nome: " + nome + "\n" + "Tel=" + tel + "\n" + "E-mail=" + email;
-	}
-
 Agenda::Agenda(){}
-
-void Agenda::setContatos(std::vector<Contato*> &Contatos)
-{
-    this->Contatos = Contatos;
-}
 
 void Agenda::addCont(Contato *c)
 {  
   Contatos.push_back(c);
+}
+
+void Agenda::mudaNome(string nome){
+  int controle=0;
+  string novo_nome;
+    for (int i = 0; i < Contatos.size(); i++)
+    {
+      Contato *aux = Contatos[i];
+        if(aux->getNome()==nome){
+          std::cout<<"\nEntre com o novo nome.\n";
+          getline(std::cin,novo_nome);
+          Contatos[i]->setNome(novo_nome);
+          controle=1;
+          std::cout<<"\nNome alterado com sucesso.\n";
+        }
+    }
+    if(controle==0){
+      cout<<"\nContato nao encontrado.\n";
+    }
+}
+
+void Agenda::mudaTel(string nome){
+  int controle=0;
+  string novo_telefone;
+    for (int i = 0; i < Contatos.size(); i++)
+    {
+      Contato *aux = Contatos[i];
+        if(aux->getNome()==nome){
+          std::cout<<"\nEntre com o novo telefone.\n";
+          getline(std::cin,novo_telefone);
+          Contatos[i]->setTel(novo_telefone);
+          controle=1;
+          std::cout<<"\nTelefone alterado com sucesso.\n";
+        }
+    }
+    if(controle==0){
+      cout<<"\nContato nao encontrado.\n";
+    }
+}
+
+void Agenda::mudaEmail(string nome){
+  int controle=0;
+  string novo_email;
+    for (int i = 0; i < Contatos.size(); i++)
+    {
+      Contato *aux = Contatos[i];
+        if(aux->getNome()==nome){
+          std::cout<<"\nEntre com o novo e-mail.\n"; 
+          getline(std::cin,novo_email);
+          Contatos[i]->setEmail(novo_email);
+          controle=1;
+          std::cout<<"\nE-mail alterado com sucesso.\n";
+        }
+    }
+    if(controle==0){
+      cout<<"\nContato nao encontrado.\n";
+    }
 }
 
 void Agenda::mostra(string nome)
@@ -120,7 +156,7 @@ void Agenda::mostra(string nome)
         }
     }
     if(controle==0){
-      cout<<"Contato nao encontrado.\n";
+      cout<<"\nContato nao encontrado.\n";
     }
     
 }
@@ -132,7 +168,6 @@ void Agenda::compara()
   sort(Contatos.begin(),Contatos.end(),[](auto a, auto b){
     return(a->getNome()<b->getNome());
   });
-
 }
 
 void Agenda::removeCont(string nome)
@@ -148,41 +183,157 @@ void Agenda::removeCont(string nome)
         }
     }
     if(controle==0){
-      cout<<"Contato nao encontrado.\n";
+      cout<<"\nContato nao encontrado.\n";
     }
 }
 
 void Agenda::mostraLista()
 {   
-    Agenda::compara();
-     for (int i = 0; i < Contatos.size(); i++)
-    {
-        Contato *aux = Contatos[i];
-        cout<<*aux<<"\n";
+    if(Contatos.empty()){
+      std::cout<<"\nAgenda vazia.\n";
+    }else{
+        Agenda::compara();
+        for (int i = 0; i < Contatos.size(); i++){
+            Contato *aux = Contatos[i];
+            cout<<*aux<<"\n";
+        }
     } 
 }
+
+void menu(string s){
+  std::cout<<"Contatos de "<<s<<"\n";
+  std::cout<<"Para adicionar contato digite 1.\n";
+  std::cout<<"Para deletar contato digite 2.\n";
+  std::cout<<"Para mostrar um contato especifico digite 3.\n";
+  std::cout<<"Para exibir toda sua agenda digite 4.\n";
+  std::cout<<"Para exibir o menu novamente digite 5.\n";
+  std::cout<<"Para alterar o nome de um contato digite 6.\n";
+  std::cout<<"Para alterar o telefone de um contato digite 7.\n";
+  std::cout<<"Para alterar o e-mail de um contato digite 8.\n";
+  std::cout<<"Para sair digite 0.\n";
+
+}
+
 int main(int argc, char *argv[])
 {
-    Contato *c1 = new Contato("Pedro Augusto","pedroagunto@hotmail.com","933001246");
-    Contato *c2 = new Contato("Gustavo","gostodetrc@gmail.com","31984988956");
-    Contato *c3 = new Contato("Thayron","gangangan@pgmlhr.com","989764544");
-    Contato *c4 = new Contato("Gabriel","pcovbnna@ngr.com","318882544");
-    Contato *c5 = new Contato("Pedro Souza","pedro.hfsouza@hotmail.com","3198802444");
-    Contato *c6 = new Contato ("Augusto vendedor avon","avonaredes@revendedor.com","31984988956");
-    string s= "Gabriel";
+    string s;
+    int op;
+    string n;
+    string e;
+    string t;
+    std::cout<<"\nDigite seu nome.\n";
+    getline (std::cin,s);
     Agenda *a = new Agenda();
-    a->addCont(c6);
-    a->addCont(c5);
-    a->addCont(c4);
-    a->addCont(c3);
-    a->addCont(c2);
-    a->addCont(c1);
-    a->mostraLista();
-    cout<<"*******************\n";
-    a->mostra("Pedro Souza");
-    cout<<"*******************\n";
-    a->removeCont(s);
-      cout << "\n\n" << endl;
-    a->mostraLista();
+    menu(s);
+    std::cout<<"\nEntre com a opcao desejada.\n";
+    std::cin>>op;
+    while(op!=0){
+      switch(op){
+        case 1:{
+                cin.ignore();
+                std::cout<<"\nEntre com o nome.\n";
+                  getline (std::cin,n);
+                fflush(stdin);
+                std::cout<<"\nEntre com o email.\n";
+                  getline (cin,e);
+                fflush(stdin);
+                std::cout<<"\nEntre com o telefone.\n";
+                  getline (cin,t);
+                fflush(stdin);
+                Contato *c = new Contato(n,t,e);
+                a->addCont(c);
+                cout<<"\nEntre com a nova opcao.\n";
+                  std::cin>>op;
+                fflush(stdin);
+                break;
+        }
+         case 2: {
+                std::cout<<"\nDigite o nome do contato que deseja excluir.\n";
+                //std::cin>>n;
+                cin.ignore();
+                getline (cin,n);             
+                a->removeCont(n);
+                cout<<"\nEntre com a nova opcao.\n";
+                std::cin>>op;
+                break;
+      }
+        case 3:{
+              std::cout<<"\nDigite o nome do contato que deseja exibir.\n";
+              fflush(stdin);
+              cin.ignore();
+              getline (cin,n);
+              a->mostra(n);
+              cout<<"\nEntre com a nova opcao.\n";
+              fflush(stdin);
+              std::cin>>op;
+              break;
+        }
+        case 4:{
+          if(a->Contatos.empty()){
+            cout<<"\nLista vazia.\n";
+            cout<<"\nEntre com a nova opcao.\n";
+            fflush(stdin);
+            std::cin>>op;
+          }else{
+              a->mostraLista();
+              cout<<"\nEntre com a nova opcao.\n";
+              fflush(stdin);
+              std::cin>>op;
+          }
+              break;
+        }
+        case 5:{
+              menu(s);
+              cout<<"\nEntre com a nova opcao.\n";
+              fflush(stdin);
+              std::cin>>op;
+              break;
+        }
+        case 6:{
+              std::cout<<"\nDigite o nome do contato cujo nome voce deseja alterar.\n";
+              fflush(stdin);
+              cin.ignore();
+              getline (cin,n);
+              a->mudaNome(n);
+              cout<<"\nEntre com a nova opcao.\n";
+              fflush(stdin);
+              std::cin>>op;
+              break;
+        }
+        case 7:{
+              std::cout<<"\nDigite o nome do contato cujo telefone voce deseja alterar.\n";
+              fflush(stdin);
+              cin.ignore();
+              getline (cin,n);
+              a->mudaTel(n);
+              cout<<"\nEntre com a nova opcao.\n";
+              fflush(stdin);
+              std::cin>>op;
+              break;
+        }
+        case 8:{
+              std::cout<<"\nDigite o nome do contato cujo email voce deseja alterar.\n";
+              fflush(stdin);
+              cin.ignore();
+              getline (cin,n);
+              a->mudaEmail(n);
+              cout<<"\nEntre com a nova opcao.\n";
+              fflush(stdin);
+              std::cin>>op;
+              break;
+        }
+        case 0:{
+              break;
+        }
+        default:{
+              cout<<"\nOpcao invalida.\n";
+              cout<<"\nEntre com a nova opcao.\n";
+              fflush(stdin);
+              cin>>op;
+              break;
+        }
+      }
+    }
     delete a;
+    return 13;
 }
